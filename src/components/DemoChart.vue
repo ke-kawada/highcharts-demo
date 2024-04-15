@@ -172,61 +172,6 @@ const chartOptions: Options = {
   ],
 }
 
-// const chartOptions: Options = {
-//   chart: {
-//   type: 'bar',
-//     events: {
-//       render() {
-//         const chart = this,
-//           renderer = chart.renderer,
-//           yAxis = chart.yAxis[0],
-//           {
-//             from,
-//             to
-//           } = yAxis.brokenAxis.breakArray[0],
-//           x = (yAxis.toPixels(from) + yAxis.toPixels(to)) / 2,
-//           y = yAxis.height + chart.plotTop,
-//           w = 40,
-//           path = [
-//             'M', x, y + 50,
-//             'L', x, 20
-//           ];
-
-//         if (!this.brokenAxisPath) {
-//           this.brokenAxisPath = renderer.path(path).attr({
-//             stroke: 'red',
-//             'stroke-width': 3
-//           }).add();
-//         } else {
-//           this.brokenAxisPath.attr({
-//             d: path
-//           })
-//         }
-
-//       }
-//     }
-//   },
-//   yAxis: {
-//     tickInterval: 1,
-//     breaks: [{
-//       from: 5,
-//       to: 10,
-//       breakSize: 0.5
-//     }]
-//   },
-//   series: [{
-//     type: 'bar',
-//     gapSize: 1,
-//     data: (function() {
-//       const data = [];
-//       for (let i = 0; i < 20; i = i + 1) {
-//         data.push(i);
-//       }
-//       return data;
-//     }())
-//   }]
-// }
-
 /**
  * On top of each column, draw a zigzag line where the axis break is.
  */
