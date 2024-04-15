@@ -31,6 +31,38 @@ const originData = {
 }
 
 const chartOptions: Options = {
+  chart: {
+    type: 'bar',
+    events: {
+      render() {
+        const chart = this,
+          renderer = chart.renderer,
+          yAxis = chart.yAxis[0],
+          {
+            from,
+            to
+          } = yAxis.brokenAxis.breakArray[0],
+          x = (yAxis.toPixels(from) + yAxis.toPixels(to)) / 2,
+          y = yAxis.height + chart.plotTop,
+          w = 40,
+          path = [
+            'M', x, y + 50,
+            'L', x, 0
+          ];
+
+        if (!this.brokenAxisPath) {
+          this.brokenAxisPath = renderer.path(path).attr({
+            stroke: 'red',
+            'stroke-width': 3
+          }).add();
+        } else {
+          this.brokenAxisPath.attr({
+            d: path
+          })
+        }
+      }
+    }
+  },
   title: {
     text: 'July 2024.',
     align: 'left',
@@ -81,16 +113,16 @@ const chartOptions: Options = {
     lineWidth: 1,
     tickColor: '#E0E0E0',
     tickWidth: 1,
-    tickInterval: 25000,
+    // tickInterval: 25000,
     breaks: [
       {
         from: 250000,
         to: 1150000,
       }
     ],
-    events: {
-      pointBreak: pointBreakColumn as AxisPointBreakEventCallbackFunction // 2-2
-    }
+    // events: {
+    //   pointBreak: pointBreakColumn as AxisPointBreakEventCallbackFunction // 2-2
+    // }
   },
   series: [
     {
@@ -140,46 +172,101 @@ const chartOptions: Options = {
   ],
 }
 
+// const chartOptions: Options = {
+//   chart: {
+//   type: 'bar',
+//     events: {
+//       render() {
+//         const chart = this,
+//           renderer = chart.renderer,
+//           yAxis = chart.yAxis[0],
+//           {
+//             from,
+//             to
+//           } = yAxis.brokenAxis.breakArray[0],
+//           x = (yAxis.toPixels(from) + yAxis.toPixels(to)) / 2,
+//           y = yAxis.height + chart.plotTop,
+//           w = 40,
+//           path = [
+//             'M', x, y + 50,
+//             'L', x, 20
+//           ];
+
+//         if (!this.brokenAxisPath) {
+//           this.brokenAxisPath = renderer.path(path).attr({
+//             stroke: 'red',
+//             'stroke-width': 3
+//           }).add();
+//         } else {
+//           this.brokenAxisPath.attr({
+//             d: path
+//           })
+//         }
+
+//       }
+//     }
+//   },
+//   yAxis: {
+//     tickInterval: 1,
+//     breaks: [{
+//       from: 5,
+//       to: 10,
+//       breakSize: 0.5
+//     }]
+//   },
+//   series: [{
+//     type: 'bar',
+//     gapSize: 1,
+//     data: (function() {
+//       const data = [];
+//       for (let i = 0; i < 20; i = i + 1) {
+//         data.push(i);
+//       }
+//       return data;
+//     }())
+//   }]
+// }
+
 /**
  * On top of each column, draw a zigzag line where the axis break is.
  */
-function pointBreakColumn(this: Axis, e: ChartClickEventObject): void {
-  const point = e.point, // 2-3
-    brk = e.brk, // 2-4
-    shapeArgs = point.shapeArgs,
-    shapeArgsX = shapeArgs.x,
-    shapeArgsY = this.translate(brk.from, 0, 1, 0, 1), // 2-5
-    shapeArgsWidth = shapeArgs.width,
-    key = ['brk', brk.from, brk.to],
-    path = [
-      'M',
-      shapeArgsX,
-      shapeArgsY,
-      'L',
-      shapeArgsX + shapeArgsWidth * 0.25,
-      shapeArgsY + 3,
-      'L',
-      shapeArgsX + shapeArgsWidth * 0.75,
-      shapeArgsY - 3,
-      'L',
-      shapeArgsX + shapeArgsWidth,
-      shapeArgsY
-    ]
+// function pointBreakColumn(this: Axis, e: ChartClickEventObject): void {
+//   const point = e.point, // 2-3
+//     brk = e.brk, // 2-4
+//     shapeArgs = point.shapeArgs,
+//     shapeArgsX = shapeArgs.x,
+//     shapeArgsY = this.translate(brk.from, 0, 1, 0, 1), // 2-5
+//     shapeArgsWidth = shapeArgs.width,
+//     key = ['brk', brk.from, brk.to],
+//     path = [
+//       'M',
+//       shapeArgsX,
+//       shapeArgsY,
+//       'L',
+//       shapeArgsX + shapeArgsWidth * 0.25,
+//       shapeArgsY + 3,
+//       'L',
+//       shapeArgsX + shapeArgsWidth * 0.75,
+//       shapeArgsY - 3,
+//       'L',
+//       shapeArgsX + shapeArgsWidth,
+//       shapeArgsY
+//     ]
 
-  if (!point[key]) {
-    point[key] = this.chart.renderer
-      .path(path)
-      .attr({
-        'stroke-width': 4,
-        stroke: point.series.options.borderColor
-      })
-      .add(point.graphic.parentGroup)
-  } else {
-    point[key].attr({
-      d: path
-    })
-  }
-}
+//   if (!point[key]) {
+//     point[key] = this.chart.renderer
+//       .path(path)
+//       .attr({
+//         'stroke-width': 4,
+//         stroke: point.series.options.borderColor
+//       })
+//       .add(point.graphic.parentGroup)
+//   } else {
+//     point[key].attr({
+//       d: path
+//     })
+//   }
+// }
 </script>
 
 <template>
